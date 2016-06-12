@@ -22,6 +22,7 @@ public class MainActivity1 extends AppCompatActivity implements View.OnClickList
     Button b1,b2,b3,b4;
     String answerWord="";
     int wordCount = 0;
+    int score = 0;
     String [] words = {"CATS","DOGS","PIGS","SWAN","RATS","GOAT"};
     int ctr = 0;
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,19 +63,24 @@ public class MainActivity1 extends AppCompatActivity implements View.OnClickList
         Button b = (Button)view;
         answerWord = answerWord + b.getText();
         Log.w("Answer::",answerWord);
-        b.setVisibility(View.GONE);
+        b.setVisibility(View.INVISIBLE);
         ctr++;
         Log.w("ctr value",String.valueOf(ctr));
         Log.w("word count value",String.valueOf(wordCount));
         if(ctr == 4){
             if(rightAnswer()){
+                score++;
+                wordCount++;
+                if(wordCount == words.length){
+                    wordCount = 0;
+                }
                 Toast.makeText(MainActivity1.this,"Correct Answer",Toast.LENGTH_SHORT).show();
                 showCards(words);
             }
             else{
                 Toast.makeText(MainActivity1.this,"Wrong Answer",Toast.LENGTH_SHORT).show();
                 Intent intent = new Intent(MainActivity1.this,GameEndActivity.class);
-                intent.putExtra("SCORE",String.valueOf(wordCount-1));
+                intent.putExtra("SCORE",String.valueOf(wordCount));
                 startActivity(intent);
             }
             ctr=0;
@@ -82,7 +88,8 @@ public class MainActivity1 extends AppCompatActivity implements View.OnClickList
     }
 
     private boolean rightAnswer() {
-        if(answerWord.equals(words[wordCount-1]))
+        Log.w("wc right answer",String.valueOf(wordCount));
+        if(answerWord.equals(words[wordCount]))
             return true;
         return false;
     }
@@ -107,8 +114,6 @@ public class MainActivity1 extends AppCompatActivity implements View.OnClickList
         b3.setText(String.valueOf(a_char));
         a_char = sword.charAt(3);
         b4.setText(String.valueOf(a_char));
-        wordCount++;
-        if(wordCount == 6)
-            wordCount=0;
+
     }
 }
